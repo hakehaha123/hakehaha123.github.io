@@ -12,15 +12,15 @@
     "integrity": "sha256-ScMgpjcoH1UWVBAzrRnpXRU7aJsAIzcvaA2taAFuqCc= sha384-Ji+7LLzzdxMHlDFK85+cIUF8X5wM/S+KGbfouuPaLwmEIuQAKt67oxYUr9ua20DD"
   },
   "index.css": {
-    "src": "index.e44b6.css",
+    "src": "index.12bf2.css",
     "integrity": "sha256-ug7iGlUz+/saVogdD2qT/CZvMzOcEDnQgnkjuHBpzXw= sha384-pPLD+lyXkcT/ce+aM/XFNnlUNaK+ekzn74FuT9runGxtfSUJia8N/Z0mbNz3NFjs"
   },
   "index.js": {
-    "src": "index.e44b6.js",
+    "src": "index.12bf2.js",
     "integrity": "sha256-n4uJ129bfu2OBczDqTnDvjRbJZgRVnVkisQhQvCJ67Y= sha384-QCBD9Pi05xv4qWOHknn+C/iOZW0Kih5mdpNDECTCH86dBHBJAHmhEx1ZtD4onaUw"
   },
   "vendor.js": {
-    "src": "vendor.e44b6.js",
+    "src": "vendor.12bf2.js",
     "integrity": "sha256-mt0WTVvBMzJ2oiFGlkpuoR3qVu5XCxPXQy3Cx58YKKk= sha384-Iogl1kB1YuPkeozHgM9WhAUhLrm1XpQ9BE5ix5+b6qo9UeaiE0hjFlhhDnVdcOvR"
   }
 }
