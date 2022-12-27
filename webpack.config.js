@@ -108,7 +108,7 @@ const config = {
           {
             loader: 'url-loader',
             options: {
-              limit: 50,
+              limit: 20 * 1024,
               name: '[name].[hash:5].[ext]',
               url: false,
               outputPath: 'images'

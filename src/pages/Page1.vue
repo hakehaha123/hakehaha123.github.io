@@ -7,7 +7,7 @@
       <button class="btn search-btn" @click="search(searchInput)">search</button>
     </div>
     <div v-else class="loading">The tags of auto-complete is Loading...</div>
-    <div v-if="query" class="back no-drag mt-bigger"><a href="javascript:;" @click="backToAll">< Back to All</a></div>
+    <div v-if="query" class="back no-drag mt-bigger"><a href="javascript:;" @click="backToAll">&lt; Back to All</a></div>
     <div v-if="news.length">
       <template v-if="currList.length">
         <ul class="news-list">

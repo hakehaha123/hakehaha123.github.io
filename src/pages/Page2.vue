@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="back no-drag"><a href="javascript:;" @click="$router.go(-1)">< Back</a></div>
+    <div class="back no-drag"><a href="javascript:;" @click="$router.go(-1)">&lt; Back</a></div>
     <h1>{{ title || "Test Title" }}</h1>
     <article>
       {{ description || "Test content." }}
