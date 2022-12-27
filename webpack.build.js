@@ -30,7 +30,7 @@ config.optimization = {
       }
     }
   },
-  runtimeChunk: { name: 'runtime' }
+  // runtimeChunk: { name: 'runtime' }
 };
 config.plugins.unshift(
   new CleanWebpackPlugin()
