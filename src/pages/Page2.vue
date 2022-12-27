@@ -11,8 +11,8 @@
       <div>
         <h2>Music</h2>
         <audio controls style="max-height: 100%;max-width: 100%;">
-          <source src="http://rnjmvhdht.bkt.clouddn.com/gyz.mp3" type="audio/ogg">
-          <source src="http://rnjmvhdht.bkt.clouddn.com/gyz.mp3" type="audio/mpeg">
+          <source src="/audios/gyz.mp3" type="audio/ogg">
+          <source src="/audios/gyz.mp3" type="audio/mpeg">
         </audio>
       </div>
       <div>
@@ -170,7 +170,7 @@ export default class Page2 extends Vue {
   config = {
     id: 'vs',
     fluid: true,
-    url: 'http://rnjmvhdht.bkt.clouddn.com/gyz.mp4',
+    url: '/videos/gyz.mp4',
     autoplay: true,
     muted: true,
     autoplayMuted: true
