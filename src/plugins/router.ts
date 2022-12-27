@@ -1,6 +1,11 @@
 import Vue from "vue";
 import Router from "vue-router";
 import Page1 from '../pages/Page1.vue';
+const RouterPush = Router.prototype.push;
+Router.prototype.push = function push(to) {
+  return RouterPush.call(this, to).catch((err) => err);
+}
+
 Vue.use(Router);
 
 export default new Router({
