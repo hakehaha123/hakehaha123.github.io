@@ -78,12 +78,12 @@ export default class Page1 extends Vue {
   }
 
   async getTags() {
-    const res = await axios.get("/tag.json");
+    const res = await axios.get("/data/tag.json");
     this.tags = res.data;
   }
 
   async getNews() {
-    const res = await axios.get("/news.json");
+    const res = await axios.get("/data/news.json");
     this.news = res.data;
   }
 
@@ -130,6 +130,7 @@ export default class Page1 extends Vue {
     padding: 10px 10px 10px 20px;
     border-radius: 16px 0 0 16px;
     border-right: none;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   }
 
   .ac__filtered-items {
@@ -148,6 +149,7 @@ export default class Page1 extends Vue {
   width: 100px;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+  border: solid 1px #16BFB7 !important;
 }
 
 .search-area {
