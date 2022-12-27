@@ -3,10 +3,10 @@ const path = require('path');
 const os = require('os');
 const HappyPack = require('happypack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const {VueLoaderPlugin} = require('vue-loader');
+const { VueLoaderPlugin } = require('vue-loader');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const devMode = process.env.NODE_ENV === 'development';
-const happyThreadPool = HappyPack.ThreadPool({size: os.cpus().length});
+const happyThreadPool = HappyPack.ThreadPool({ size: os.cpus().length });
 const publicPath = '';
 
 const config = {
@@ -19,10 +19,10 @@ const config = {
   },
   resolve: {
     extensions: ['.js', '.vue', '.json', '.ts'],
-      alias: {
-        'vue$': 'vue/dist/vue.esm.js',
-        '@': path.resolve(__dirname, 'src')
-      }
+    alias: {
+      'vue$': 'vue/dist/vue.esm.js',
+      '@': path.resolve(__dirname, 'src')
+    }
   },
 
   module: {
@@ -36,8 +36,8 @@ const config = {
         use: [
           'vue-style-loader',
           devMode ? {
-              loader: 'style-loader',
-            } :
+            loader: 'style-loader',
+          } :
             MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
@@ -63,13 +63,13 @@ const config = {
           }
         ]
       },
-      { 
+      {
         test: /\.(scss)$/,
         use: [
           'vue-style-loader',
           devMode ? {
-              loader: 'style-loader'
-            } :
+            loader: 'style-loader'
+          } :
             MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
@@ -128,15 +128,18 @@ const config = {
       {
         test: /\.tsx?$/,
         use: [
+          // {
+          //   // loader: 'babel-loader',
+          //   // loader: 'happypack/loader?id=happyBabel'
+          // },
+          // {
+          //   loader: 'ts-loader',
+          // options: {
+          //   appendTsSuffixTo: [/\.vue$/]
+          // }
+          // }
           {
-            // loader: 'babel-loader',
-            loader: 'happypack/loader?id=happyBabel'
-          },
-          {
-            loader: 'ts-loader',
-          options: {
-            appendTsSuffixTo: [/\.vue$/]
-          }
+            loader: 'happypack/loader?id=ts'
           }
         ],
         exclude: /node_modules/,
@@ -144,14 +147,24 @@ const config = {
     ]
   },
   plugins: [
+    // new HappyPack({
+    //   id: 'happyBabel',
+    //   threadPool: happyThreadPool,
+    //   loaders: [
+    //     {
+    //       loader: 'babel-loader'
+    //     }
+    //   ]
+    // }),
     new HappyPack({
-      id: 'happyBabel',
+      id: 'ts',
       threadPool: happyThreadPool,
       loaders: [
         {
-          loader: 'babel-loader'
-        }
-      ]
+          path: 'ts-loader',
+          query: { happyPackMode: true, transpileOnly: true },
+        },
+      ],
     }),
     new HappyPack({
       id: 'scss',
@@ -175,7 +188,7 @@ const config = {
     new HtmlWebpackPlugin({
       template: './src/index.html',
       filename: './index.html',
-      chunks: ['index','vendor','commons','manifest'],
+      chunks: ['index', 'vendor', 'commons', 'manifest'],
       inject: true,
       showErrors: true,
       hash: false,
