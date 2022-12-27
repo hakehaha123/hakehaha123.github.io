@@ -26,7 +26,7 @@
           </td>
           <td style="border-top:0" align="center">
             <a href="https://line.me/R/ti/p/%40onw0127a"><img height="36" alt="友だち追加"
-                src="https://scdn.line-apps.com/n/line_add_friends/btn/ja.png"></a>
+                src="@/assets/images/ja.png"></a>
           </td>
         </tr>
       </tbody>
@@ -96,8 +96,6 @@ export default class Page3 extends Vue {
   
 <style lang="scss">
 .page-header {
-  margin-top: 40px;
-
   &::after {
     clear: both;
     content: "";
@@ -175,36 +173,6 @@ export default class Page3 extends Vue {
 
 .form-group-btn {
   margin: 20px 0
-}
-
-.form-control {
-  width: 100%;
-  max-width: 540px;
-  padding: 10px 8px;
-  font-size: 16px;
-  line-height: 1;
-  border: solid 1px #d0d0d5;
-  border-radius: 4px;
-  background: #FFF;
-  -webkit-appearance: none;
-
-  &:-ms-input-placeholder {
-    color: #CCC
-  }
-
-  &::placeholder {
-    color: #CCC
-  }
-
-  &:focus {
-    outline: 0;
-    border: 1px solid #16BFB7
-  }
-
-  &:disabled {
-    background: #f0f0f0;
-    cursor: not-allowed
-  }
 }
 
 .errors,

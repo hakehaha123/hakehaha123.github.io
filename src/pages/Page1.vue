@@ -1,16 +1,17 @@
 <template>
-  <div class="container">
-    <div v-if="tags.length" class="auto-complete">
-      <AutoComplete :items="tags" objectMatchkey="name" :template="{
+  <div>
+    <div v-if="tags.length" class="flex col-12 search-area mt-small" :class="{ active: showTags }">
+      <AutoComplete class="flex1 auto-complete" :items="tags" objectMatchkey="name" :template="{
         keys: ['name']
-      }" @inputChanged="setInput" @onSelected="search" />
-      <button @click="search(searchInput)">search</button>
+      }" @inputChanged="setInput" @onSelected="search" @focus="showTags = true" @blur="showTags = false" />
+      <button class="btn search-btn" @click="search(searchInput)">search</button>
     </div>
     <div v-else class="loading">The tags of auto-complete is Loading...</div>
+    <div v-if="query" class="back no-drag mt-bigger"><a href="javascript:;" @click="backToAll">< Back to All</a></div>
     <div v-if="news.length">
       <template v-if="currList.length">
         <ul class="news-list">
-          <li v-for="item in currList" :key="item['id']" @click="toDetail(item)">
+          <li v-for="item in currList" :key="item['id']" @click="toDetail(item)" class="news-item">
             <div>
               <h3>{{ item['title'] }}</h3>
               <p>{{ item['desc'] }}</p>
@@ -42,6 +43,7 @@ import AutoComplete from "../components/AutoComplete.vue";
   }
 })
 export default class Page1 extends Vue {
+  showTags = false;
   searchInput = "";
   query = "";
   tags = [];
@@ -105,6 +107,12 @@ export default class Page1 extends Vue {
     })
   }
 
+  backToAll() {
+    this.searchInput = "";
+    this.query = "";
+    this.page = 1;
+  }
+
   created() {
     this.getTags();
     this.getNews();
@@ -113,9 +121,45 @@ export default class Page1 extends Vue {
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style lang="scss" scoped>
-h3 {
-  margin: 40px 0 0;
+<style lang="scss">
+.auto-complete {
+  padding: 0;
+  input {
+    border: solid 1px #16BFB7;
+    outline: none;
+    padding: 10px 10px 10px 20px;
+    border-radius: 16px 0 0 16px;
+    border-right: none;
+  }
+
+  .ac__filtered-items {
+
+    border: solid 1px #16BFB7 !important;
+
+    .ac__filtered-item {
+      padding: 5px 10px;
+    }
+    margin-top: -1px;
+    margin-right: -100px;
+  }
+}
+
+.search-btn {
+  width: 100px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.search-area {
+  max-width: 600px;
+  &.active {
+    input {
+      border-bottom-left-radius: 0;
+    }
+    .search-btn {
+      border-bottom-right-radius: 0;
+    }
+  }
 }
 
 .no-result, .loading {
@@ -123,29 +167,26 @@ h3 {
   text-align: center;
 }
 
-.container {
-  max-width: 960px;
-  margin: 0 auto;
-}
-
-.auto-complete {
-  width: 153px;
-  display: flex;
-  align-items: center;
-}
-
-.news-list li {
+.news-list {
+  margin-top: 30px;
+  li.news-item {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 10px 0;
+  cursor: pointer;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 30px;
   .news-pic {
-    width: 160px;
-    height: 90px;
+    width: 100px;
+    height: 100px;
+    border-radius: 10px;
+    overflow: hidden;
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
     }
   }
-}
+}}
 </style>

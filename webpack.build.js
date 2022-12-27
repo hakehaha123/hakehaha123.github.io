@@ -29,8 +29,7 @@ config.optimization = {
         enforce: true
       }
     }
-  },
-  // runtimeChunk: { name: 'runtime' }
+  }
 };
 config.plugins.unshift(
   new CleanWebpackPlugin()

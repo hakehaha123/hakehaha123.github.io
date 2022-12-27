@@ -5,12 +5,12 @@
         <nav :class="{ 'header-link-area': true, active: navShow }">
             <ul v-for="item in ['pc', 'mobile']" :key="item" :class="`nav-header nav-header--${item}`">
                 <li v-for="index in 3" :key="index" class="header-link more-info">
-                    <router-link class="left-tab" :to="{ path: `/page${index}` }">{{ `Page${index}` }}</router-link>
+                    <a href="javascript:;" class="left-tab" @click="linkTo(index)">{{ `Page${index}` }}</a>
                 </li>
             </ul>
         </nav>
         <div class="menu-box" @click="navShow = !navShow">
-            <label id="hamburger-1" class="hamburger">
+            <label id="hamburger-1" :class="{ hamburger: true, active: navShow }">
                 <span class="line line-01"></span>
                 <span class="line line-02"></span>
                 <span class="line line-03"></span>
@@ -27,6 +27,14 @@ export default Vue.extend({
         return {
             navShow: false
         }
+    },
+    methods: {
+        linkTo(index: number) {
+            this.navShow = false;
+            this.$router.push({
+                name: `Page${index}`
+            })
+        }
     }
 });
 </script>
@@ -36,10 +44,11 @@ header {
     width: 100%;
     z-index: 9999;
     background: #FFF;
-    box-shadow: 0px 1px 2px rgba(0,0,0,0.2);
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
     position: fixed;
     height: auto
 }
+
 .new-header {
     height: 80px;
     display: -ms-flexbox;
@@ -100,21 +109,21 @@ header {
 
 @media screen and (max-width: 800px) {
     .new-header {
-        height:44px;
+        height: 44px;
         padding: 0 16px
     }
 
     .new-header .header-link a {
-    position: relative;
-    font-size: 1.1rem;
-    line-height: 28px;
-    padding: 16px;
-    color: #493b32;
-    text-decoration: none;
-    font-weight: bold;
-    display: block;
-    position: relative;
-}
+        position: relative;
+        font-size: 1.1rem;
+        line-height: 28px;
+        padding: 16px;
+        color: #493b32;
+        text-decoration: none;
+        font-weight: bold;
+        display: block;
+        position: relative;
+    }
 
 
     .new-header .header-link:hover>a {
@@ -125,6 +134,7 @@ header {
         width: 86px;
         height: 20px
     }
+
     .new-header .header-link {
         margin-right: 0;
         border-radius: 0;

@@ -1,5 +1,5 @@
 <template>
-  <div class="sc__container">
+  <div class="ac__container">
     <input
       type="search"
       v-model="searchInput"
@@ -12,10 +12,10 @@
       @keydown.up="up"
       @keydown.down="down"
     />
-    <div class="sc__filtered-items" v-if="canShowFilteredItems">
+    <div class="ac__filtered-items" v-if="canShowFilteredItems">
       <div
-        class="sc__filtered-item"
-        :class="{ 'sc__filtered-item__hovered': index === cursor }"
+        class="ac__filtered-item"
+        :class="{ 'ac__filtered-item__hovered': index === cursor }"
         v-for="(item, index) in filteredItems"
         :key="index"
         @click="selectItem(item)"
@@ -69,10 +69,11 @@ export default Vue.extend({
   },
   methods: {
     blur() {
-      setTimeout(() => (this.showItems = false), 200);
+      setTimeout(() => (this.showItems = false,  this.$emit("blur")), 200);
     },
     focus() {
       this.showItems = true;
+      this.$emit("focus")
     },
     inputChanged() {
       this.showItems = true;
@@ -172,14 +173,14 @@ export default Vue.extend({
     up() {
       if (this.cursor > -1) {
         this.cursor--;
-        this.$el.getElementsByClassName("sc__filtered-item")[this.cursor];
+        this.$el.getElementsByClassName("ac__filtered-item")[this.cursor];
       }
     },
     down() {
       this.showItems = true;
       if (this.cursor < this.filteredItems.length) {
         this.cursor++;
-        this.$el.getElementsByClassName("sc__filtered-item")[this.cursor];
+        this.$el.getElementsByClassName("ac__filtered-item")[this.cursor];
       }
     },
     escape() {
@@ -190,14 +191,14 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-.sc__container {
+.ac__container {
   position: relative;
   display: grid;
-  grid-template-columns: auto;
+  grid-template-columns: 1fr;
   justify-content: start;
 }
 
-.sc__filtered-items {
+.ac__filtered-items {
   position: absolute;
   top: 0;
   left: 0;
@@ -215,12 +216,12 @@ export default Vue.extend({
   background-color: white;
 }
 
-.sc__container .sc__filtered-items .sc__filtered-item {
+.ac__container .ac__filtered-items .ac__filtered-item {
   cursor: pointer;
 }
 
-.sc__container .sc__filtered-items .sc__filtered-item:hover,
-.sc__container .sc__filtered-items .sc__filtered-item__hovered {
+.ac__container .ac__filtered-items .ac__filtered-item:hover,
+.ac__container .ac__filtered-items .ac__filtered-item__hovered {
   background-color: #eee;
   color: #101010;
 }

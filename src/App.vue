@@ -1,10 +1,8 @@
 <template>
-  <div>
+  <div class="container">
     <TopHeader></TopHeader>
-    <div class="container">
-      <div class="container-body">
-        <router-view class="main-content-container"></router-view>
-      </div>
+    <div class="container-body">
+      <router-view class="main-content-container"></router-view>
     </div>
   </div>
 </template>
@@ -23,19 +21,26 @@ export default class App extends Vue { }
 
 <style lang="scss">
 @import "./assets/scss/common.scss";
+
 body {
-    font-size: 13px;
-    margin: auto;
-    height: 100%;
-    position: relative;
-    font-size: 16px;
-    color: #493b32;
-    line-height: 1.4em;
-    -webkit-tap-highlight-color: transparent;
+  font-size: 13px;
+  margin: auto;
+  height: 100%;
+  position: relative;
+  font-size: 16px;
+  color: #493b32;
+  line-height: 1.4em;
+  -webkit-tap-highlight-color: transparent;
 }
-body, input, select, option, textarea {
-    font-family: Noto Sans JP, Hiragino Kaku Gothic ProN, Arial, メイリオ, Meiryo, sans-serif;
+
+body,
+input,
+select,
+option,
+textarea {
+  font-family: Noto Sans JP, Hiragino Kaku Gothic ProN, Arial, メイリオ, Meiryo, sans-serif;
 }
+
 body,
 ul,
 li {
@@ -87,11 +92,45 @@ button {
   padding: 0 28px;
   border: 1px solid transparent;
   border-radius: 16px;
-  color: rgba(255,255,255,0.9) !important;
+  color: rgba(255, 255, 255, 0.9) !important;
   font-size: 14px;
   text-decoration: none;
   line-height: 36.4px;
   background: #16BFB7;
+  cursor: pointer;
+}
+
+.form-control {
+  width: 100%;
+  max-width: 540px;
+  padding: 10px 8px;
+  font-size: 16px;
+  line-height: 1;
+  border: solid 1px #d0d0d5;
+  border-radius: 4px;
+  background: #FFF;
+  -webkit-appearance: none;
+
+  &:-ms-input-placeholder {
+    color: #CCC
+  }
+
+  &::placeholder {
+    color: #CCC
+  }
+
+  &:focus {
+    outline: 0;
+    border: 1px solid #16BFB7
+  }
+
+  &:disabled {
+    background: #f0f0f0;
+    cursor: not-allowed
+  }
+}
+
+.back {
   cursor: pointer;
 }
 
@@ -105,9 +144,10 @@ button {
 
 .main-content-container {
   width: 90%;
+  max-width: 960px;
   position: relative;
   margin: auto;
-  padding: 60px 20px 100px 230px;
+  padding: 100px 20px 100px;
   transition: .5s padding-left;
 
   &.no-nav {
