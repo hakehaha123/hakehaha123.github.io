@@ -1,0 +1,26 @@
+{
+  "images/btn_base.png": {
+    "src": "images/btn_base.d50b0.png",
+    "integrity": "sha256-xPA1NU4voASK2nY8LANs9hviVOu4zhwSTNdhyNso800= sha384-BnbZBXKQoKDIpMZHAtg/JTeVgxBgngz7Xwg6sF3BFk4ZbEW3QEtoW1rTPiX5f5cJ"
+  },
+  "images/logo.png": {
+    "src": "images/logo.f4a6d.png",
+    "integrity": "sha256-ScMgpjcoH1UWVBAzrRnpXRU7aJsAIzcvaA2taAFuqCc= sha384-Ji+7LLzzdxMHlDFK85+cIUF8X5wM/S+KGbfouuPaLwmEIuQAKt67oxYUr9ua20DD"
+  },
+  "index.css": {
+    "src": "0.d02ec8da6e4d1aa9709e.css",
+    "integrity": "sha256-KvtQnxw9zG5p7gPQG4ijLWQWOKmq94b7FWTffUjytek= sha384-G477aL3Z4aMSx0WZMjeFfzRprMwXRWIsMUF/6z4iMD3nnDOzv7kZro74wS+6XKkL"
+  },
+  "index.js": {
+    "src": "index.d02ec.js",
+    "integrity": "sha256-/aDEVvsZl0oYO3qUdMj6csCOxttHlPy6g5EVkPmy45g= sha384-tDU7tYo5SrjRFf7amIorCb64htebGUwbMsg/x297J60GRSZz6Nih41eRTmH3DJbr"
+  },
+  "runtime.js": {
+    "src": "runtime.d02ec.js",
+    "integrity": "sha256-vc7cwAhazA5NWkSJstc8Kq4/kYsX8xuvz02OixzHcr4= sha384-D7l+DNv0l6nl6P3OaL2VIIM5daTi6pjCJgPLTz4A4zIiPkkyDp84kSvogxGbQ+L2"
+  },
+  "vendor.js": {
+    "src": "vendor.d02ec.js",
+    "integrity": "sha256-Y3QxfI9weG78FJ1OkG7wRUTkd1YxVNsMfb69JEUZkdo= sha384-5UwQDeAT9eGI9v8ocD5JLwQWh7HfBsObNAnTnvqt9QNvk4HdIvMZPn6e6/I4cVYk"
+  }
+}
