@@ -1,12 +1,13 @@
+const path = require('path');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
 const open = require('open');
 
 const config = require('./webpack.config');
 
-process.env.NODE_ENV='development';
+process.env.NODE_ENV = 'development';
 config.mode = 'development';
-config.devtool='cheap-module-eval-source-map';
+config.devtool = 'cheap-module-eval-source-map';
 
 config.plugins.push(
     new webpack.HotModuleReplacementPlugin(),
@@ -20,6 +21,10 @@ const addressObj = {
 };
 
 new WebpackDevServer(webpack(config), {
+    contentBase: [
+        path.resolve(__dirname, 'public'), 
+        path.resolve(__dirname, 'dist')
+    ],
     historyApiFallback: true,
     hot: true,
     hotOnly: true,
@@ -28,14 +33,14 @@ new WebpackDevServer(webpack(config), {
     },
     compress: false,
 })
-    .listen(addressObj.port,addressObj.ip,function (error) {
-    error&&console.log(error);
-    let address=`http://${addressObj.ip}:${addressObj.port}`;
-    open(address);
-    console.log('listening at:'+address)
-});
+    .listen(addressObj.port, addressObj.ip, function (error) {
+        error && console.log(error);
+        let address = `http://${addressObj.ip}:${addressObj.port}`;
+        open(address);
+        console.log('listening at:' + address)
+    });
 
-function getLocalIPAdress () {
+function getLocalIPAdress() {
     var interfaces = require('os').networkInterfaces();
     for (let devName in interfaces) {
         let iface = interfaces[devName];

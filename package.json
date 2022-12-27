@@ -5,17 +5,11 @@
   "main": "index.ts",
   "scripts": {
     "dev": "webpack --mode development",
-    "build": "rm -r dist & webpack --mode production",
-    "dist": "rm -r dist & webpack --config webpack.build.js",
-    "analy": "webpack --config webpack.analy.js",
+    "build": "webpack --config webpack.build.js",
     "start": "node webpack.server.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "clean": "rm -r dist/*"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/zhoulujun/webpack4-vue2-project-template.git"
-  },
+  "repository": {},
   "keywords": [],
   "author": "",
   "license": "MIT",
@@ -23,8 +17,11 @@
     "@babel/core": "^7.2.2",
     "@babel/preset-env": "^7.2.3",
     "autoprefixer": "^9.4.4",
+    "axios": "^1.2.1",
     "babel-eslint": "^10.0.1",
     "babel-loader": "^8.0.4",
+    "clean-webpack-plugin": "^4.0.0",
+    "copy-webpack-plugin": "6.0.3",
     "css-loader": "^2.1.0",
     "eslint": "^5.12.0",
     "eslint-loader": "^2.1.1",
@@ -57,8 +54,8 @@
     "webpack-assets-manifest": "^3.1.1",
     "webpack-cli": "^3.2.0",
     "webpack-dev-server": "^3.1.14",
-    "webpack-sftp-client": "^1.2.1",
-    "webpack-subresource-integrity": "^1.3.1"
+    "webpack-subresource-integrity": "^1.3.1",
+    "xgplayer-vue": "^1.1.5"
   },
   "dependencies": {
     "sass": "^1.21.0"

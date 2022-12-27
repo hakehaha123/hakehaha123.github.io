@@ -156,23 +156,11 @@ export default Vue.extend({
     },
     selectItem(item: string) {
       if (item) {
-        this.searchInput = this.getSelectedItem(item);
+        this.searchInput = item;
         this.$emit("inputChanged", this.searchInput);
+        this.$emit("onSelected", item);
         this.showItems = false;
       }
-    },
-    getSelectedItem(item: string) {
-      if (this.objectMatchkey && this.tempObjectItems) {
-        const itemObject = this.tempObjectItems.find(tempItem => 
-            tempItem && typeof tempItem === "object" && item.includes(tempItem[this.objectMatchkey as keyof typeof tempItem])
-        );
-        if (itemObject && typeof itemObject === "object") {
-          return (
-            itemObject[this.objectMatchkey as keyof typeof itemObject] ?? item
-          );
-        }
-      }
-      return item;
     },
     enter() {
       if (this.showItems && this.filteredItems[this.cursor]) {
@@ -224,6 +212,7 @@ export default Vue.extend({
   max-height: 400px;
   overflow-y: auto;
   z-index: 9999;
+  background-color: white;
 }
 
 .sc__container .sc__filtered-items .sc__filtered-item {

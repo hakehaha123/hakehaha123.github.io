@@ -16,6 +16,14 @@
         "resolveJsonModule": true,
         "isolatedModules": true,
         "noEmit": false,
-        "jsx": "preserve"
-    }
+        "jsx": "preserve",
+        "strictPropertyInitialization": false
+    },
+    "include": [
+        "src/**/*",
+    ],
+    "exclude": [
+        "node_modules",
+        "dist"
+    ]
 }
