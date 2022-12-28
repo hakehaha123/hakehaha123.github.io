@@ -6,6 +6,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 // const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CompressionWebpackPlugin = require('compression-webpack-plugin');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 
@@ -79,6 +80,15 @@ config.plugins.push(
         to: path.resolve(__dirname, 'dist')
       }
     ],
+  }),
+  new CompressionWebpackPlugin({
+    filename: '[path].gz[query]',
+    algorithm: 'gzip',
+    test: new RegExp(
+      '\\.(js|css)$'
+    ),
+    threshold: 10240,
+    minRatio: 0.8
   }),
   new BundleAnalyzerPlugin()
 );
