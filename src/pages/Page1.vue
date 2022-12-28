@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="tags.length" class="flex col-12 search-area mt-small" :class="{ active: showTags }">
+    <div v-if="tags.length" class="flex col-12 search-area" :class="{ active: showTags }">
       <AutoComplete class="flex1 auto-complete" :items="tags" objectMatchkey="name" :template="{
         keys: ['name']
       }" @inputChanged="setInput" @onSelected="search" @focus="showTags = true" @blur="showTags = false" />
@@ -153,6 +153,7 @@ export default class Page1 extends Vue {
 }
 
 .search-area {
+  margin-top: 10px;
   max-width: 600px;
   &.active {
     input {
@@ -160,6 +161,30 @@ export default class Page1 extends Vue {
     }
     .search-btn {
       border-bottom-right-radius: 0;
+    }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .search-area {
+    margin-top: 0 !important;
+    &.active {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      max-width: none;
+      input, .search-btn {
+        border-radius: 0 !important;
+      }
+      .auto-complete {
+        .ac__filtered-items {
+          height: 100vh;
+          max-height: none;
+          padding-bottom: 40px;
+        }
+      }
     }
   }
 }

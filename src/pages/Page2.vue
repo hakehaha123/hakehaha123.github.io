@@ -168,7 +168,7 @@ export default class Page2 extends Vue {
   title = "";
   description = "";
   config = {
-    id: 'vs',
+    id: 'video-player',
     fluid: true,
     url: '/videos/gyz.mp4',
     autoplay: true,
@@ -215,8 +215,8 @@ export default class Page2 extends Vue {
 
 @media screen and (max-width: 800px) {
   #btn-to-top {
-    bottom: 15px;
-    right: 15px;
+    bottom: 25px;
+    right: 25px;
     padding: 10px 8px;
     font-size: 12px;
 

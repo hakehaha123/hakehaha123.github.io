@@ -3,15 +3,45 @@ const WebpackAssetsManifest = require('webpack-assets-manifest');
 const WebpackSubresourceIntegrity = require('webpack-subresource-integrity');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 
 const config = require('./webpack.config');
 
 process.env.NODE_ENV = 'production';
 config.mode = 'production';
+config.performance = {
+  hints: false
+};
 
 config.optimization = {
-  splitChunks: { 
+  // minimizer: [
+  //   new UglifyJsPlugin({
+  //     cache: true,
+  //     parallel: true,
+  //     sourceMap: true
+  //   }),
+  //   new OptimizeCSSAssetsPlugin({})
+  // ],
+  minimizer: [
+    new TerserPlugin({
+      terserOptions: {
+        compress: {
+          warnings: false,
+          drop_console: true
+        }
+      },
+      parallel: true,
+      sourceMap: true,
+      cache: true,
+      cacheKeys: (defaultCacheKeys, file) => Object.assign({}, defaultCacheKeys, {path: file}),
+    }),
+    new OptimizeCSSAssetsPlugin()
+  ],
+  splitChunks: {
     chunks: 'initial',
     cacheGroups: {
       commons: {
@@ -49,7 +79,8 @@ config.plugins.push(
         to: path.resolve(__dirname, 'dist')
       }
     ],
-  })
+  }),
+  new BundleAnalyzerPlugin()
 );
 
 module.exports = config;
