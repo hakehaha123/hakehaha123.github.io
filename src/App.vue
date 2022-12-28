@@ -79,8 +79,12 @@ img {
   border: none;
 }
 
-button {
+button,
+input {
   outline: none;
+  border: none;
+  box-shadow: none;
+  background: transparent;
 }
 
 .btn {

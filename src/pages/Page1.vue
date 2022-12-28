@@ -124,19 +124,22 @@ export default class Page1 extends Vue {
 <style lang="scss">
 .auto-complete {
   padding: 0;
+  display: flex !important;
+  justify-content: space-between !important;
   input {
     border: solid 1px #16BFB7;
+    flex: 1;
     outline: none;
-    padding: 10px 10px 10px 20px;
+    height: 37px;
     border-radius: 16px 0 0 16px;
+    padding: 0 10px 0;
     border-right: none;
-    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    background: white;
   }
 
   .ac__filtered-items {
-
+    top: 37px;
     border: solid 1px #16BFB7 !important;
-
     .ac__filtered-item {
       padding: 5px 10px;
     }
@@ -147,9 +150,11 @@ export default class Page1 extends Vue {
 
 .search-btn {
   width: 100px;
+  height: 37px;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   border: solid 1px #16BFB7 !important;
+  box-shadow: none;
 }
 
 .search-area {
