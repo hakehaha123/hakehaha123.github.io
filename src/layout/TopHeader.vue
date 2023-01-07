@@ -50,7 +50,7 @@ header {
 }
 
 .new-header {
-    height: 80px;
+    height: 60px;
     display: -ms-flexbox;
     display: flex;
     -webkit-box-flex: 1;
@@ -109,7 +109,7 @@ header {
 
 @media screen and (max-width: 800px) {
     .new-header {
-        height: 44px;
+        height: 37px;
         padding: 0 16px
     }
 
@@ -249,12 +249,12 @@ header {
     .header-link-area {
         overflow: scroll;
         position: absolute;
-        top: 44px;
+        top: 37px;
         left: 0;
         width: 100%;
         height: 100vh;
         background: #FFF;
-        padding-bottom: 44px;
+        padding-bottom: 37px;
         visibility: hidden;
         border-top: 1px solid rgba(0, 0, 0, 0.2)
     }

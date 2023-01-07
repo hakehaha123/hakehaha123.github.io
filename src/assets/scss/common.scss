@@ -320,6 +320,9 @@ $directions: top, bottom, left, right, full, center;
   .pb-#{nth($sizes, $i)} {
     padding-bottom: $i * 5px !important;
   }
+  .pr-#{nth($sizes, $i)} {
+    padding-right: $i * 5px !important;
+  }
   .m-#{nth($sizes, $i)} {
     margin-top: $i * 5px !important;
     margin-left: $i * 5px !important;

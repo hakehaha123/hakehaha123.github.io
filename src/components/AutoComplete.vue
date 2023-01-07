@@ -1,26 +1,24 @@
 <template>
   <div class="ac__container">
-    <input
-      type="search"
-      v-model="searchInput"
-      @blur="blur"
-      @input="inputChanged"
-      @focus="focus"
-      @keyup.esc="escape"
-      @keyup.enter="enter"
-      @keydown.tab="enter"
-      @keydown.up="up"
-      @keydown.down="down"
-    />
-    <div class="ac__filtered-items" v-if="canShowFilteredItems">
-      <div
-        class="ac__filtered-item"
-        :class="{ 'ac__filtered-item__hovered': index === cursor }"
-        v-for="(item, index) in filteredItems"
-        :key="index"
-        @click="selectItem(item)"
-        @mouseover="cursor = index"
-      >
+    <div class="ac__input_box">
+      <div class="ac__selected-items">
+        <span v-for="(item, index) in selectedItems" :key="item">
+          {{ item }}
+          <button @click="deselcetItem(item)" type="button" aria-label="deselect">
+            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10">
+              <path :d="closeBtnPath">
+              </path>
+            </svg>
+          </button>
+        </span>
+        <input type="search" v-model="searchInput" @blur="onBlur" @input="inputChanged" @click="onFocus"
+          @keyup.esc="escape" @keyup.enter="enter" @keydown.up="up" @keydown.down="down" @keydown.backspace="backspace"
+          autocomplete="off" />
+      </div>
+    </div>
+    <div class="ac__filtered-items" v-show="canShowFilteredItems">
+      <div class="ac__filtered-item" :class="{ 'ac__filtered-item__hovered': index === cursor }"
+        v-for="(item, index) in filteredItems" :key="index" @click="selectItem(item)" @mouseover="cursor = index">
         <div>{{ item }}</div>
       </div>
     </div>
@@ -33,14 +31,22 @@ export default Vue.extend({
   name: "auto-complete",
   data() {
     return {
+      selectedItems: new Array<string>(),
       searchInput: "",
       showItems: false,
       filteredItems: new Array<string>(),
-      cursor: -1,
-      tempObjectItems: new Array<unknown>()
+      cursor: 0,
+      tempObjectItems: new Array<unknown>(),
+      closeBtnPath: "M6.895455 5l2.842897-2.842898c.348864-.348863.348864-.914488 0-1.263636L9.106534.261648c-.348864-.348864-.914489-.348864-1.263636 0L5 3.104545 2.157102.261648c-.348863-.348864-.914488-.348864-1.263636 0L.261648.893466c-.348864.348864-.348864.914489 0 1.263636L3.104545 5 .261648 7.842898c-.348864.348863-.348864.914488 0 1.263636l.631818.631818c.348864.348864.914773.348864 1.263636 0L5 6.895455l2.842898 2.842897c.348863.348864.914772.348864 1.263636 0l.631818-.631818c.348864-.348864.348864-.914489 0-1.263636L6.895455 5z",
+      errors: "",
+      errorsShow: false
     };
   },
   props: {
+    value: {
+      type: Array,
+      required: true
+    },
     items: {
       type: Array,
       required: true
@@ -68,10 +74,10 @@ export default Vue.extend({
     }
   },
   methods: {
-    blur() {
-      setTimeout(() => (this.showItems = false,  this.$emit("blur")), 200);
+    onBlur() {
+      setTimeout(() => (this.showItems = false, this.$emit("blur")), 200);
     },
-    focus() {
+    onFocus() {
       this.showItems = true;
       this.$emit("focus")
     },
@@ -89,7 +95,7 @@ export default Vue.extend({
         this.setFilteredItemsForObjectType(newInput);
       }
 
-      this.cursor = -1;
+      this.cursor = 0;
     },
     setFilteredItemsForStringType(newInput: string) {
       const matchedItems: unknown[] = this.items.filter(item => {
@@ -107,8 +113,8 @@ export default Vue.extend({
       this.filteredItems =
         matchedItems.length > 0
           ? matchedItems.map(item =>
-              this.constructFileteredItemFromObject(item)
-            )
+            this.constructFileteredItemFromObject(item)
+          )
           : this.items.map(item => this.constructFileteredItemFromObject(item));
     },
     constructFileteredItemFromObject(item: unknown) {
@@ -137,19 +143,18 @@ export default Vue.extend({
 
         return String(item[this.objectMatchkey as keyof typeof item]);
       }
-      
+
       return "";
     },
     isMatchFoundInStringItem(item: string, newInput: string) {
-      return item.toLocaleLowerCase().includes(newInput.toLocaleLowerCase());
+      const reg: RegExp = new RegExp(newInput.split('').join('.*'), 'i')
+      return reg.test(item);
     },
     isMatchFoundInObjectItem(item: unknown, newInput: string) {
-      if (item && typeof item === "object"  && newInput && this.objectMatchkey) {
+      if (item && typeof item === "object" && newInput && this.objectMatchkey) {
         const itemValue: string =
           item[this.objectMatchkey as keyof typeof item];
-        const isMatchFound: boolean = itemValue
-          .toLocaleLowerCase()
-          .includes(newInput.toLocaleLowerCase());
+        const isMatchFound: boolean = this.isMatchFoundInStringItem(itemValue, newInput);
         return isMatchFound;
       }
 
@@ -157,10 +162,28 @@ export default Vue.extend({
     },
     selectItem(item: string) {
       if (item) {
-        this.searchInput = item;
+        this.searchInput = "";
+        if (this.selectedItems.indexOf(item) == -1) {
+          this.selectedItems.push(item);
+        }
+        this.$el.querySelector("input")?.focus();
+        this.$emit("focus");
         this.$emit("inputChanged", this.searchInput);
-        this.$emit("onSelected", item);
+        this.$emit("input", [...this.selectedItems]);
         this.showItems = false;
+      }
+    },
+    deselcetItem(selectItem: string) {
+      const index: number = this.selectedItems.findIndex(item => selectItem === item);
+      if (index > -1) {
+        this.selectedItems.splice(index, 1);
+        this.$emit("input", [...this.selectedItems]);
+      }
+    },
+    backspace() {
+      if (this.searchInput == "") {
+        this.selectedItems.splice(-1, 1);
+        this.$emit("input", [...this.selectedItems]);
       }
     },
     enter() {
@@ -185,44 +208,109 @@ export default Vue.extend({
     },
     escape() {
       this.showItems = !this.showItems;
+    },
+    showErrors(message: string) {
+      this.errorsShow = true;
+      this.errors = message;
     }
   }
 });
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .ac__container {
   position: relative;
-  display: grid;
-  grid-template-columns: 1fr;
-  justify-content: start;
+  background: white;
+}
+
+.ac__input_box {
+  appearance: none;
+  display: flex;
+  padding: 0 0 4px;
+  background: inherit;
+  border: 1px solid #16BFB7;
+  border-radius: var(--vs-border-radius);
+  white-space: normal;
+  overflow: hidden;
+}
+
+.ac__selected-items {
+  display: flex;
+  flex-basis: 100%;
+  flex-grow: 1;
+  flex-wrap: wrap;
+  padding: 0 2px;
+  position: relative;
+  font-size: 12px;
+  line-height: 20px;
+  min-height: 30px;
+
+  >span {
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0;
+    border: 1px solid rgba(60, 60, 60, 0.26);
+    border-radius: 4px;
+    margin: 4px 2px 0;
+    padding: 0 5px;
+    z-index: 0;
+    min-height: 20px;
+
+    >button {
+      display: inline-flex;
+      appearance: none;
+      margin-left: 4px;
+      padding: 0;
+      border: 0;
+      cursor: pointer;
+      background: none;
+      fill: rgba(60, 60, 60, 0.5);
+      text-shadow: 0 1px 0 #fff;
+    }
+  }
+
+  input {
+    color: inherit;
+    appearance: none;
+    border: 1px solid transparent;
+    border-left: none;
+    outline: none;
+    margin: 4px 0 0;
+    padding: 0 7px;
+    background: none;
+    box-shadow: none;
+    width: 0;
+    max-width: 100%;
+    flex-grow: 1;
+    z-index: 1;
+  }
 }
 
 .ac__filtered-items {
+  display: block;
+  box-sizing: border-box;
   position: absolute;
-  top: 0;
+  top: calc(100% - 1px);
   left: 0;
-  right: 0;
-  width: auto;
-  grid-row: 2;
-  padding: 2px;
-  text-align: left;
-  border: 2px solid #ececec;
-  border-top: none;
-  border-radius: 2px;
-  max-height: 400px;
+  z-index: 999;
+  padding: 0;
+  width: 100%;
+  max-height: 350px;
   overflow-y: auto;
-  z-index: 9999;
-  background-color: white;
-}
+  box-shadow: 0px 3px 6px 0px rgba(0, 0, 0, 0.15);
+  border: 1px solid #16BFB7;
+  border-top-style: none;
+  text-align: left;
+  list-style: none;
+  background: inherit;
 
-.ac__container .ac__filtered-items .ac__filtered-item {
-  cursor: pointer;
-}
+  .ac__filtered-item {
+    cursor: pointer;
 
-.ac__container .ac__filtered-items .ac__filtered-item:hover,
-.ac__container .ac__filtered-items .ac__filtered-item__hovered {
-  background-color: #eee;
-  color: #101010;
+    &.ac__filtered-item__hovered {
+      background-color: #16BFB7;
+      color: white;
+    }
+  }
 }
 </style>

@@ -35,6 +35,7 @@ body {
 
 body,
 input,
+button,
 select,
 option,
 textarea {
@@ -43,7 +44,9 @@ textarea {
 
 body,
 ul,
-li {
+li,
+button,
+h3 {
   margin: 0;
   padding: 0;
   border: 0;
@@ -151,7 +154,7 @@ input {
   max-width: 960px;
   position: relative;
   margin: auto;
-  padding: 100px 20px 100px;
+  padding: 80px 20px 100px;
   transition: .5s padding-left;
 
   &.no-nav {

@@ -1,22 +1,28 @@
 <template>
   <div>
-    <div v-if="tags.length" class="flex col-12 search-area" :class="{ active: showTags }">
+    <div v-if="tags.length" class="col-12 search-area" :class="{ active: showTags, isfixed: fixedTop }">
+      <div class="back-btn">
+        <button class="semibold no-drag" @click="fixedTop = false">←</button>
+      </div>
       <AutoComplete class="flex1 auto-complete" :items="tags" objectMatchkey="name" :template="{
         keys: ['name']
-      }" @inputChanged="setInput" @onSelected="search" @focus="showTags = true" @blur="showTags = false" />
-      <button class="btn search-btn" @click="search(searchInput)">search</button>
+      }" v-model="searchInput" @focus="showTags = true, fixedTop = true" @blur="showTags = false" />
+      <div class="search-btn">
+        <button class="no-drag" @click="search(searchInput)">search</button>
+      </div>
     </div>
     <div v-else class="loading">The tags of auto-complete is Loading...</div>
-    <div v-if="query" class="back no-drag mt-bigger"><a href="javascript:;" @click="backToAll">&lt; Back to All</a></div>
-    <div v-if="news.length">
+    <div v-if="query.length" class="back no-drag" :class="{  'isfixed': fixedTop }"><a href="javascript:;" @click="backToAll">&lt; Back to All</a>
+    </div>
+    <div v-if="news.length" :class="{ 'search-result': true, 'isfixed': fixedTop }">
       <template v-if="currList.length">
         <ul class="news-list">
           <li v-for="item in currList" :key="item['id']" @click="toDetail(item)" class="news-item">
-            <div>
-              <h3>{{ item['title'] }}</h3>
-              <p>{{ item['desc'] }}</p>
+            <div class="pr-smaller">
+              <h3 class="semibold">{{ item['title'] }}</h3>
+              <p class="font-smaller">{{ item['desc'] }}</p>
             </div>
-            <div class="news-pic">
+            <div class="news-pic flex-shrink0">
               <img v-lazyload="item['img']" src="/images/blocker.jpg" />
             </div>
           </li>
@@ -26,9 +32,15 @@
           <button class="btn" v-show="page < totalPage" @click="goNext">Next page</button>
         </div>
       </template>
-      <div v-else-if="query" class="no-result">No result.</div>
+      <div v-else-if="query.length" class="no-result">No result.</div>
     </div>
     <div v-else class="loading">News is Loading...</div>
+    <div :class="{ 'pop-mask': true, hide: !popupShow }">
+      <div class="pop-content">
+        <div>{{ errorMsg }}</div>
+        <button class="btn mt-normal" @click="popupShow = false">Confirm</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -44,17 +56,22 @@ import AutoComplete from "../components/AutoComplete.vue";
 })
 export default class Page1 extends Vue {
   showTags = false;
-  searchInput = "";
-  query = "";
+  searchInput = [];
+  query: Array<string> = [];
   tags = [];
   news = [];
   page = 1;
   limit = 20;
+  fixedTop = false;
+  errorMsg = "";
+  popupShow = false;
 
   get currNews() {
-    return this.query ? this.news.filter((item: any) =>  
-      item.title.indexOf(this.query) > -1
-    ) : this.news;
+    return this.query.length ? this.news.filter((news: any) => {
+      const str: string = this.query.join('|');
+      const reg: RegExp = new RegExp(`${str}`, "i");
+      return [news.title, news.desc].some((item) => reg.test(item));
+    }) : this.news;
   }
 
   get currList() {
@@ -87,11 +104,18 @@ export default class Page1 extends Vue {
     this.news = res.data;
   }
 
-  setInput(value: string) {
-    this.searchInput = value;
+  showErrors(message: string) {
+    this.errorMsg = message;
+    this.popupShow = true;
   }
 
-  search(query: string) {
+  search(query: Array<string>) {
+    console.log(this.query)
+    if (!query.length) {
+      const message = "Please select at least one tag.";
+      this.showErrors(message);
+      return;
+    }
     this.page = 1;
     this.query = query;
   }
@@ -108,8 +132,8 @@ export default class Page1 extends Vue {
   }
 
   backToAll() {
-    this.searchInput = "";
-    this.query = "";
+    this.searchInput = [];
+    this.query = [];
     this.page = 1;
   }
 
@@ -120,51 +144,56 @@ export default class Page1 extends Vue {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
 .auto-complete {
-  padding: 0;
-  display: flex !important;
-  justify-content: space-between !important;
-  input {
-    border: solid 1px #16BFB7;
-    flex: 1;
-    outline: none;
-    height: 37px;
-    border-radius: 16px 0 0 16px;
-    padding: 0 10px 0;
-    border-right: none;
-    background: white;
+  .ac__input_box {
+    min-height: 37px;
+    border-radius: 6px 0 0 6px;
   }
 
   .ac__filtered-items {
-    top: 37px;
-    border: solid 1px #16BFB7 !important;
     .ac__filtered-item {
       padding: 5px 10px;
     }
-    margin-top: -1px;
-    margin-right: -100px;
+
+    width: calc(100% + 100px);
   }
 }
 
+.back, .search-result {
+  margin-top: 30px;
+}
+
+.back-btn {
+  display: none;
+}
+
 .search-btn {
-  width: 100px;
-  height: 37px;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  border: solid 1px #16BFB7 !important;
-  box-shadow: none;
+  display: flex;
+  button {
+    padding: 0;
+    width: 100px;
+    min-height: 37px;
+    border-radius: 0 6px 6px 0;
+    box-shadow: none;
+    box-sizing: border-box;
+    background: #16BFB7;
+    color: white;
+    cursor: pointer;
+  }
 }
 
 .search-area {
   margin-top: 10px;
   max-width: 600px;
+  display: flex;
+
   &.active {
-    input {
+    .auto-complete .ac__input_box {
       border-bottom-left-radius: 0;
     }
-    .search-btn {
+
+    .search-btn button {
       border-bottom-right-radius: 0;
     }
   }
@@ -173,52 +202,128 @@ export default class Page1 extends Vue {
 @media screen and (max-width: 800px) {
   .search-area {
     margin-top: 0 !important;
-    &.active {
+
+    .search-btn button {
+      width: 60px;
+    }
+
+    &.isfixed {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       z-index: 9999;
       max-width: none;
-      input, .search-btn {
+
+      .back-btn {
+        display: flex;
+        border: 1px solid #16BFB7;
+        border-right: 0;
+        background: white;
+        box-sizing: border-box;
+        button {
+          width: 28px;
+          color: #16BFB7;
+          background: inherit;
+          cursor: pointer;
+        }
+      }
+
+      .auto-complete .ac__input_box {
+        border-bottom-left-radius: 0;
+        border-top-left-radius: 0;
+        border-left: 0;
+      }
+
+      .auto-complete .ac__input_box,
+      .search-btn button {
         border-radius: 0 !important;
       }
-      .auto-complete {
-        .ac__filtered-items {
-          height: 100vh;
-          max-height: none;
-          padding-bottom: 40px;
-        }
+
+      .auto-complete .ac__filtered-items {
+        margin-left: -29px;
+        height: 100vh;
+        max-height: none;
+        padding-bottom: 40px;
+        width: calc(100% + 89px);
+      }
+    }
+  }
+  .back.isfixed, .search-result.isfixed {
+    margin-top: 0;
+  }
+  .news-list {
+    li.news-item {
+      .news-pic {
+        width: 80px !important;
+        height: 80px !important;
       }
     }
   }
 }
 
-.no-result, .loading {
+.no-result,
+.loading {
   margin: 20% auto 0;
   text-align: center;
 }
 
 .news-list {
-  margin-top: 30px;
   li.news-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 10px 0;
-  cursor: pointer;
-  border-bottom: 1px solid #eee;
-  margin-bottom: 30px;
-  .news-pic {
-    width: 100px;
-    height: 100px;
-    border-radius: 10px;
-    overflow: hidden;
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+
+    .news-pic {
+      width: 100px;
+      height: 100px;
+      border-radius: 10px;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
     }
   }
-}}
+}
+
+.pop-mask {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  overflow: auto;
+  left: 0;
+  top: 0;
+  background: rgba(255, 255, 255, 0.5);
+  z-index: 1000;
+  display: flex;
+  .pop-content {
+    border-radius: 6px;
+    border: 1px solid #16BFB7;
+    padding: 10px;
+    background: white;
+    opacity: 1;
+    transition: transform .5s ease, opacity .5s ease-out;
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
+    position: absolute;
+    width: 240px;
+    min-height: 100px;
+    top: 20%;
+    left: 50%;
+    margin-left: -140px;
+    text-align: center;
+    transform: scale(1);
+  }
+  &.hide {
+    visibility: hidden;
+    .pop-content {
+      opacity: 0;
+      transform: scale(.8);
+    }
+  }
+}
 </style>

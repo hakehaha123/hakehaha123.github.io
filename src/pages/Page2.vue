@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div class="back no-drag"><a href="javascript:;" @click="$router.go(-1)">&lt; Back</a></div>
+    <div class="back no-drag mt-0"><a href="javascript:;" @click="$router.go(-1)">&lt; Back</a></div>
     <h1>{{ title || "Test Title" }}</h1>
     <article>
       {{ description || "Test content." }}
       <div>
         <h2>Video</h2>
-        <Xgplayer :config="config" @player="Player = $event" />
+        <Xgplayer :config="config" @player="playerReady" />
       </div>
       <div>
         <h2>Music</h2>
@@ -167,21 +167,27 @@ import { Component, Vue } from "vue-property-decorator";
 export default class Page2 extends Vue {
   title = "";
   description = "";
+  player = null;
   config = {
     id: 'video-player',
     fluid: true,
     url: '/videos/gyz.mp4',
     autoplay: true,
-    muted: true,
-    autoplayMuted: true
+    muted: false,
+    autoplayMuted: false
   };
-  Player = null
 
   created() {
     console.log(this.$route.params)
     const { title = "", description = "" } = this.$route.params;
     this.title = title;
     this.description = description;
+  }
+
+  playerReady(player: any) {
+    try {
+      player.play();
+    } catch (err) {}
   }
 
   toTop(i: number) {
@@ -199,6 +205,10 @@ export default class Page2 extends Vue {
 </script>
 
 <style lang="scss">
+.mt-0 {
+  margin-top: 0 !important;
+}
+
 #btn-to-top {
   position: fixed;
   bottom: 30px;
