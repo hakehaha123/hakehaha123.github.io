@@ -6,13 +6,14 @@
       </div>
       <AutoComplete class="flex1 auto-complete" :items="tags" objectMatchkey="name" :template="{
         keys: ['name']
-      }" v-model="searchInput" @focus="showTags = true, fixedTop = true" @blur="showTags = false" />
+      }" v-model="searchInput" ref="_autoComplete" @focus="showTags = true, fixedTop = true" @blur="showTags = false" />
       <div class="search-btn">
         <button class="no-drag" @click="search(searchInput)">search</button>
       </div>
     </div>
     <div v-else class="loading">The tags of auto-complete is Loading...</div>
-    <div v-if="query.length" class="back no-drag" :class="{  'isfixed': fixedTop }"><a href="javascript:;" @click="backToAll">&lt; Back to All</a>
+    <div v-if="query.length" class="back no-drag" :class="{  'isfixed': fixedTop }">
+      <a href="javascript:;" @click="backToAll">&lt; Clear & back to home</a>
     </div>
     <div v-if="news.length" :class="{ 'search-result': true, 'isfixed': fixedTop }">
       <template v-if="currList.length">
@@ -67,7 +68,10 @@ export default class Page1 extends Vue {
   popupShow = false;
 
   get currNews() {
-    return this.query.length ? this.news.filter((news: any) => {
+    return this.query.length ? this.news.filter((news: { 
+      title: string, 
+      desc: string 
+    }) => {
       const str: string = this.query.join('|');
       const reg: RegExp = new RegExp(`${str}`, "i");
       return [news.title, news.desc].some((item) => reg.test(item));
@@ -133,6 +137,7 @@ export default class Page1 extends Vue {
   }
 
   backToAll() {
+    (this.$refs._autoComplete as Vue & { clear: Function }).clear();
     this.searchInput = [];
     this.query = [];
     this.page = 1;

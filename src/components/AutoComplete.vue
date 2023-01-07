@@ -209,9 +209,9 @@ export default Vue.extend({
     escape() {
       this.showItems = !this.showItems;
     },
-    showErrors(message: string) {
-      this.errorsShow = true;
-      this.errors = message;
+    clear() {
+      this.selectedItems = [];
+      this.searchInput = "";
     }
   }
 });
