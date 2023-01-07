@@ -46,7 +46,10 @@ body,
 ul,
 li,
 button,
-h3 {
+h1,
+h2,
+h3,
+p {
   margin: 0;
   padding: 0;
   border: 0;

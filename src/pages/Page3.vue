@@ -116,12 +116,6 @@ export default class Page3 extends Vue {
 
 }
 
-@media screen and (max-width: 800px) {
-  .page-header {
-    margin-top: 20px
-  }
-}
-
 .scroll-panel .table,
 .scroll-panel .exam-score-table,
 .scroll-panel .exam-my-score-table {

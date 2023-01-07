@@ -118,6 +118,7 @@ export default class Page1 extends Vue {
     }
     this.page = 1;
     this.query = query;
+    // this.fixedTop = false;
   }
 
   toDetail({ title = "", desc = "" }) {
