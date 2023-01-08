@@ -28,7 +28,7 @@
             </div>
           </li>
         </ul>
-        <div>
+        <div class="mt-normal">
           <button class="btn" v-show="page > 1" @click="goPrevious">Previous page</button>
           <button class="btn" v-show="page < totalPage" @click="goNext">Next page</button>
         </div>
